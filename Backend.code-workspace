@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../web dev/linkdin"
+		},
+		{
+			"path": "../web dev/shortestpathfinder"
+		},
+		{
+			"path": "../web dev/tkinter basic"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "shortestpathfinder"
+	}
+}
