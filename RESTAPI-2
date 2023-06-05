@@ -1,0 +1,65 @@
+const express=require('express')
+const app=express()
+
+app.use(express.json())
+const data=[
+   {
+      id:1,
+      name:"raghav1"
+   },
+   {
+      id:2,
+      name:"raghav2"
+   },
+   {
+      id:3,
+      name:"raghav3"
+   } ,
+   {
+      id:4,
+      name:"raghav4"
+   }
+]
+const data2=[]
+//read
+app.get('/data',(req,res)=>{
+    res.json(data)
+})
+
+//read individual
+app.get('/data/:id',(req,res)=>{
+   const dataid=parseInt(req.params.id)
+   const findid=data.find((data)=>data.id==dataid)
+   if(findid){
+      res.json(findid)
+   }
+   else{
+      res.status(404)
+   }
+})
+
+//post new object
+//make sure to use app.use(express.json())
+app.post('/data',(req,res)=>{
+const newobj=req.body
+console.log(newobj)
+data.push(newobj)
+res.status(201).json(data)
+})
+
+//update an object
+app.put('/data/:id',(req,res)=>{
+   
+})
+
+app.listen(8000,()=>{
+    console.log('server started')
+})
+
+
+
+
+// req.body is used to access the data sent in the body of the request, 
+// typically used with HTTP methods like POST or PUT.
+
+// req.params is used to access route parameters defined in the URL path.
