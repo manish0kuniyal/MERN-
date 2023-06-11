@@ -1,0 +1,60 @@
+
+
+const express = require('express');
+const app = express();
+
+const data=[]
+
+app.use(express.json());
+   
+
+app.get('/test', (req, res) => {
+  res.json(data)
+});
+
+
+app.get('/test/:id',(req,res)=>{
+  //it is a must to include parseINt 
+  //to get the id in integer form won't work otherwise
+  const  itemId=parseInt(req.params.id)
+  const elem=data.find((item)=>item.id === itemId)
+  if(elem){
+    res.json(elem)
+  }
+  else{
+    res.send("NOT FOUND")
+  }
+})
+
+app.post('/test/new', (req, res) => {
+  const requestData = req.body
+  console.log(requestData)
+  data.push(requestData)
+  //this is important! by sending res as array the previously POSTed
+  //values are still valid and can be seen as the array grows 
+  //only problem is the values get overwritten as soon as server restarts
+  res.json(data)
+});
+
+app.put('/test/:id',(req,res)=>{
+  const upid=parseInt(req.params.id)
+  const updata=req.body
+  const itemI=data.findIndex((item)=>item.id==upid)
+  data[itemI]=updata
+  res.json(data)
+})
+
+
+app.delete('/test/:id',(req,res)=>{
+  const reqs=parseInt(req.params.id)
+  const datas=data.findIndex((item)=>item.id===reqs)
+  const deletes=data.splice(datas,1)
+  res.json(data)
+})
+
+
+
+
+// app.listen(4001, () => {
+//   console.log("Server is running on port 4001");
+// });
