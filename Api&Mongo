@@ -1,0 +1,97 @@
+const express=require('express')
+const app=express()
+
+const mongoose=require('mongoose')
+const dotenv=require('dotenv')
+dotenv.config()
+
+app.use(express.json())
+
+
+//connection 
+mongoose.connect(process.env.URL,{
+  useNewUrlParser:true
+}).then(()=>console.log("connected to db"))
+.catch((err)=>console.log(err))
+
+
+//type to be accepted
+const ApiSchema=new mongoose.Schema({
+  name:String,
+  msg:String
+})
+
+//cluster creation
+const test=mongoose.model('testApi',ApiSchema)
+
+
+//get all
+app.get('/data',async(req,res)=>{
+  try{
+    const gdata=await test.find();
+    res.json(gdata)
+  }
+  catch(err){
+    console.log(err)
+  }
+})
+
+
+//post new 
+app.post('/data/create',async(req,res)=>{
+  try{
+    const newdata=await test.create(req.body)
+    res.status(201)
+  }
+  catch(err){
+    console.log(err)
+  }
+})
+
+
+//get specific
+app.get('/data/:id',async(req,res)=>{
+  try{
+    const user =await test.findById(req.params.id)
+    res.json(user)
+  }
+  catch(err){
+    console.log(err)
+  }
+
+})
+
+//update
+app.put('/data/:id',async(req,res)=>{
+  try{
+     const updata=await test.findByIdAndUpdate(req.params.id,req.body)
+     if(updata){
+      res.json(updata)
+     }
+  }
+  catch(err){
+    console.log(err)
+  }
+})
+
+//deleted
+app.delete('/data/:id',async(req,res)=>{
+  try{
+     const deldata=await test.findByIdAndDelete(req.params.id)
+     if(deldata){
+
+      res.json(deldata) 
+     }
+    else{
+      res.send("NOT FOUND")
+    }
+    }
+  catch(err){
+    console.log(err)
+  }
+})
+
+
+app.listen(2000,()=>{
+  console.log("listening on 2000")
+})
