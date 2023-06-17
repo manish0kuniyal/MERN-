@@ -1,0 +1,49 @@
+const express=require('express')
+
+const jwt=require('jsonwebtoken')
+
+const app=express()
+const ar=[]
+const secretKey='ionknow'
+app.use(express.json())
+
+app.get('/',midwre,(req,res)=>{
+    res.send("--------")
+    console.log("main")
+})
+
+function midwre(req,res,next){
+console.log('midware')
+next()
+}
+
+app.post('/gen',(req,res)=>{
+    const user=req.body;
+    console.log(user)
+        const token=jwt.sign(user,secretKey);
+        res.send(token)
+        console.log(token)
+})
+
+app.get('/test/:token',(req,res)=>{
+    try{
+         const token=req.params.token
+         const verifyx=jwt.verify(token,secretKey)
+         if(verifyx){
+            res.json('ok')
+            console.log('verified')
+         }
+         else{
+            res.status(401)
+         }
+    }
+    catch(err){
+        res.status(404)
+        console.log(err)
+    }
+})
+app.listen(5000,console.log("...on 5000"))
+
+
+///middleware is a function which runs between the time when server get's the request and send the request out
+//jwt can be used across multiple server
